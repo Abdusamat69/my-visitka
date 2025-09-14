@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Моя визитка</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background: #f0f0f0;
+      color: #333;
+      line-height: 1.1;
+    }
+
+    header {
+      position: relative;
+      text-align: center;
+      background: linear-gradient(135deg, #024180, #5563DE);
+      padding: 50px 20px 30px;
+      color: #fff;
+    }
+
+    header h1 {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2.5rem;
+      z-index: 20;
+    }
+
+    .slider {
+      position: relative;
+      width: 100%;
+      max-height: 50vh;
+      overflow: hidden;
+    }
+
+    .slides {
+      position: relative;
+      width: 100%;
+      height: 50vh;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50vh;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .slide.active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 50vh;
+      object-fit: cover;
+      display: block;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.3);
+      transition: background-color 1s ease-in-out;
+    }
+
+    .slide.active .overlay {
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .slide-text {
+      position: absolute;
+      bottom: 20%;
+      left: 50%;
+      transform: translate(-50%, 20px);
+      background-color: rgba(0,0,0,0.5);
+      color: white;
+      padding: 15px 30px;
+      font-size: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 90%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+    }
+
+    .slide.active .slide-text {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      font-size: 2rem;
+      padding: 0 10px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .prev { left: 10px; }
+    .next { right: 10px; }
+
+    .dots {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin: 0 5px;
+      background-color: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background-color: white;
+    }
+
+    @media (max-width: 768px) {
+      .slide-text {
+        font-size: 1.5rem;
+        padding: 10px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .slide-text {
+        font-size: 1.2rem;
+        padding: 8px 15px;
+      }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    section {
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      color: #5563DE;
+      margin-bottom: 15px;
+    }
+
+    ul {
+      list-style: disc;
+      padding-left: 20px;
+    }
+
+    ul li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .contacts a {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 20px;
+      background: #5563DE;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 30px;
+      transition: 0.3s;
+    }
+
+    .contacts a:hover {
+      background: #74ABE2;
+    }
+
+    .map {
+      margin-top: 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input, textarea {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 12px;
+      background: #5563DE;
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #74ABE2;
+    }
+
+    .reviews {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #fff;
+      font-size: 0.9rem;
+      background: rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<header class="slider">
+  <h1>Компания "Bisen"</h1>
+  <div class="slides">
+    <div class="slide active">
+      <img src="images/automation.jpg" alt="Автоматизация магазинов">
+      <div class="overlay"></div>
+      <div class="slide-text">Автоматизация магазинов</div>
+    </div>
+    <div class="slide">
+      <img src="images/Car.jpg" alt="Страхование автомобилей">
+      <div class="overlay"></div>
+      <div class="slide-text">Страхование автомобилей</div>
+    </div>
+  </div>
+  <button class="prev">&#10094;</button>
+  <button class="next">&#10095;</button>
+  <div class="dots">
+    <span class="dot active"></span>
+    <span class="dot"></span>
+  </div>
+</header>
+
+<div class="container">
+  <section>
+    <h2>О компании</h2>
+    <p>Компания Bisen была основана с целью внедрения современных технологий в розничную и оптовую торговлю. За годы работы мы стали партнерами ведущих компаний BIRSAN, UMAG и Paloma365, что позволило нам предложить клиентам полный спектр решений: от установки программного обеспечения до технической поддержки и обучения персонала.
+"Bisen" — это компания, специализирующаяся на комплексной автоматизации торговых точек и предоставлении страховых услуг для автомобилей. Мы помогаем бизнесу работать эффективнее, снижать операционные издержки и обеспечиваем комфортное обслуживание клиентов.
+</p>
+  </section>
+</div>
+
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  const prev = document.querySelector('.prev');
+  const next = document.querySelector('.next');
+  let current = 0;
+
+  function showSlide(index) {
+    slides[current].classList.remove('active');
+    if(index >= slides.length) current = 0;
+    else if(index < 0) current = slides.length - 1;
+    else current = index;
+    slides[current].classList.add('active');
+    dots.forEach(d => d.classList.remove('active'));
+    dots[current].classList.add('active');
+  }
+
+  next.addEventListener('click', () => showSlide(current + 1));
+  prev.addEventListener('click', () => showSlide(current - 1));
+  dots.forEach((d, i) => d.addEventListener('click', () => showSlide(i)));
+  setInterval(() => showSlide(current + 1), 4000);
+</script>
+
+</body>
+</html>
+
+    <!-- Услуги -->
+    <section>
+      <h2>Услуги автоматизации:</h2>
+      <ul>
+        <li>Автоматизация розничных магазинов и оптовых складов, а также кафе, ресторанов и столовых;</li>
+        <li>Продажа и подключение кассового оборудования с годовой гарантией;</li>
+        <li>Установка и настройка программного обеспечение, а также бесплатное сопровождение за весь период пользования программой;</li>
+        <li>Консультации и обучение персонала;</li>
+      </ul>
+    </section>
+    <!-- Услуги -->
+    <section>
+      <h2>Услуги страхования:</h2>
+      <ul>
+        <li>Страхование автомобилей въезжающих в страну временного пребывания;</li>
+        <li>Автострахования для РК;</li>
+        <li>Автострахования для временно въезжающих в РК;</li>
+        <li>Страхование ОСАГО в Кыргызстане для резидентов и нерезидентов;</li>
+        <li>Добровольное медицинское страхование для нерезидентов РФ</li>
+      </ul>
+    </section>
+
+    <!-- Контакты -->
+    <section class="contacts">
+      <h2>Контакты</h2>
+      <a href="tel:+77014110470">📞 Позвонить</a>
+      <a href="https://wa.me/+77014110470">💬 WhatsApp</a>
+      <a href="mailto:b.s.m@bk.ru?subject=Заказ%20услуг&body=Здравствуйте!%20Хочу%20уточнить%20детали.">📧 Написать</a>
+
+      <!-- Карта Google -->
+<div class="map">
+  <iframe 
+    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1483!2d51.858611!3d47.096389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2skz!4v1695900000000!5m2!1sru!2skz" 
+    width="100%" 
+    height="350" 
+    style="border:0; border-radius:12px;" 
+    allowfullscreen="" 
+    loading="lazy">
+  </iframe>
+  
+  <!-- Кнопка для открытия карты -->
+  <div style="margin-top:10px; text-align:center;">
+    <a href="https://maps.app.goo.gl/yfbQuXudfuLqa7iT7" 
+       target="_blank" 
+       style="display:inline-block; padding:10px 20px; background:#007BFF; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold;">
+      📍 Открыть в Google Maps
+    </a>
+  </div>
+</div>
+</section>
+
+    <!-- Форма обратной связи -->
+<div class="container">
+  <section>
+    <h2>Обратная связь</h2>
+    <form action="https://formspree.io/f/mdkljpdv" method="POST">
+      <input type="text" name="name" placeholder="Ваше имя" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <textarea name="message" rows="5" placeholder="Ваше сообщение" required></textarea>
+      <button type="submit">Отправить</button>
+    </form>
+  </section>
+</div>
+<!-- Раздел с отзывами -->
+<section id="reviews-section" style="padding:40px 20px; background:#f7f7f7; border-radius:16px; margin:40px auto; max-width:900px;">
+  <h2 style="text-align:center; font-size:28px; margin-bottom:20px;">Отзывы клиентов</h2>
+
+  <!-- Кнопка к форме -->
+  <a href="#review-form" class="btn-review" style="display:block; margin:20px auto; padding:12px 24px; background:#007BFF; color:white; font-size:18px; border:none; border-radius:8px; cursor:pointer; text-align:center; text-decoration:none; width:fit-content;">
+    Оставить отзыв
+  </a>
+
+  <!-- Форма -->
+  <div id="review-form" style="max-width:600px; margin:0 auto 40px auto;">
+    <iframe 
+      src="https://docs.google.com/forms/d/e/1FAIpQLScmEbvZ06MOJhuZUHGgzMN57t6tGsX-oxDxhSzasAUWMZLyOw/viewform?embedded=true" 
+      width="100%" 
+      height="500" 
+      frameborder="0" 
+      marginheight="0" 
+      marginwidth="0">
+      Загрузка…
+    </iframe>
+  </div>
+
+  <!-- Отзывы -->
+  <div id="reviews" style="max-width:600px; margin:0 auto;"></div>
+
+  <!-- Кнопка наверх -->
+  <a href="#top" class="btn-top" style="display:block; margin:20px auto; padding:12px 24px; background:#007BFF; color:white; font-size:18px; border:none; border-radius:8px; cursor:pointer; text-align:center; text-decoration:none; width:fit-content;">
+    🔝 Наверх
+  </a>
+</section>
+
+<script>
+const sheetID = "13y9sdqBPcefF3oSRRNzBgdFxn2O2DrJ8dkIOA3zINqk";
+const url = https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json;
+
+fetch(url)
+  .then(res => res.text())
+  .then(data => {
+    const json = JSON.parse(data.substr(47).slice(0, -2));
+    const rows = json.table.rows;
+    let html = "";
+
+    rows.forEach(row => {
+      const name = row.c[0]?.v || "Аноним";
+      const review = row.c[1]?.v || "";
+      const rating = row.c[2]?.v ? "⭐️".repeat(row.c[2].v) : "";
+
+      html += 
+        <div style="border:1px solid #ddd; border-radius:12px; padding:15px; margin:10px 0; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+          <h3 style="margin:0; font-size:18px; color:#333;">${name}</h3>
+          <p style="margin:8px 0; color:#555; font-size:15px;">${review}</p>
+          <p style="color:#f39c12; font-size:16px; margin:0;">${rating}</p>
+        </div>
+      ;
+    });
+
+    document.getElementById("reviews").innerHTML = html;
+  })
+  .catch(err => {
+    document.getElementById("reviews").innerHTML = "<p>Не удалось загрузить отзывы 😔</p>";
+  });
+</script>
+  <footer>
+    © 2025 Бисенов С.М. Все права защищены.
+  </footer>
+
+</body>
+</html>
