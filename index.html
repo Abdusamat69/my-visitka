@@ -442,6 +442,72 @@ fetch(url)
     document.getElementById("reviews").innerHTML = "<p>Не удалось загрузить отзывы 😔</p>";
   });
 </script>
+<section id="reviews">
+  <h2>Отзывы наших клиентов</h2>
+  <div id="reviews-container"></div>
+</section>
+
+<script>
+  fetch("https://opensheet.elk.sh/13y9sdqBPcefF3oSRRNzBgdFxn2O2DrJ8dkIOA3zINqk/Отзывы")
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("reviews-container");
+      data.forEach(item => {
+        const name = item["Имя."] && item["Имя."].trim() !== "" ? item["Имя."] : "Аноним";
+        const reviewText = item["Отзыв."] && item["Отзыв."].trim() !== "" ? item["Отзыв."] : "Без комментария";
+        const rating = parseInt(item["Оценка."]) || 0;
+
+        // создаём звёзды
+        let stars = "";
+        for (let i = 0; i < 5; i++) {
+          stars += i < rating ? "⭐" : "☆";
+        }
+
+        const reviewElement = document.createElement("div");
+        reviewElement.classList.add("review");
+        reviewElement.innerHTML = `
+          <h3>${name}</h3>
+          <p>"${reviewText}"</p>
+          <div class="stars">${stars}</div>
+        `;
+        container.appendChild(reviewElement);
+      });
+    });
+</script>
+
+<style>
+  #reviews {
+    padding: 40px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    margin: 40px auto;
+    max-width: 800px;
+  }
+  #reviews h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .review {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  .review h3 {
+    margin: 0 0 10px;
+    color: #333;
+  }
+  .review p {
+    font-style: italic;
+    color: #555;
+  }
+  .review .stars {
+    margin-top: 10px;
+    font-size: 20px;
+    color: #ff9800; /* золотой цвет звёзд */
+  }
+</style>
   <footer>
     © 2025 Бисенов С.М. Все права защищены.
   </footer>
@@ -449,5 +515,6 @@ fetch(url)
 </body>
 
 </html>
+
 
 
